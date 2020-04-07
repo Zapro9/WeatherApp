@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style type="text/css">
+        button,
+        div,
+        form,
+        input {
+          margin: 10px;
+        }
+      </style>
+
+    
+    <div id="Cities"></div>
+    
+    <link rel="stylesheet" href="style.css">
+    
+</script>
+
+</head>
+<body>
+    <!-- User Input -->
+    <form id="city-form">
+        <label for="city-input">Please enter the city you would like to see!</label>
+        <input type="text" id="desiredCity"><br>
+        
+        <!-- submit button -->
+        <input id="add-city" type="submit" value="Submit">
+    </form>
+    <!-- Where I want the cities to be added-->
+    <div id="citiesForecast"></div>
+    <!-- Script to pull desired city -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        var userCities = [];
+        // var APIKey = "4f893a7c7319cf87dd70157ba42b956d";
+        var userCity = "#city-form"
+        
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?" + userCity + "&appid=91a9c71802bf4d929c29e62320058096";
+
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function(response){
+            console.log(response);
+// creating the containers
+            var cityName = $("<h1>").text(response.name);
+            var cityTemp = $("<p>").text(response.main.temp)
+            var cityWind = $("<p>").text(response.wind.speed);
+            var cityUvIndex = $("<p>").text(response.UVindex);
+            
+        })
+
+        function renderCities() {
+            for (var i = 0; i < userCities.length; i++) {
+                var a = $("<div>");
+                //This is where I am completely lost
+            }
+        }
+
+        $("#city-input").on("click", function(event) {
+            event.preventDefault();
+
+            var userInput = $("#desiredCity").val();
+            userCities.push(userInput);
+
+        renderCities();
+        });
+    </script>
+</body>
+</html>
