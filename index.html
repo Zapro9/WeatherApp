@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,66 +10,96 @@
         div,
         form,
         input {
-          margin: 10px;
+            margin: 10px;
         }
-      </style>
+    </style>
 
-    
+
     <div id="Cities"></div>
-    
+
     <link rel="stylesheet" href="style.css">
-    
-</script>
+
+    </script>
 
 </head>
+
 <body>
     <!-- User Input -->
     <form id="city-form">
         <label for="city-input">Please enter the city you would like to see!</label>
-        <input type="text" id="desiredCity"><br>
-        
+        <input type="text" id="desiredCity" placeholder="Dallas">
+        <br>
+
+        <button id="add-city" type="submit">Submit</button>
+
         <!-- submit button -->
-        <input id="add-city" type="submit" value="Submit">
     </form>
     <!-- Where I want the cities to be added-->
-    <div id="citiesForecast"></div>
+    <div id="citiesForecast">
+
+
+
+    </div>
     <!-- Script to pull desired city -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
+
         var userCities = [];
-        // var APIKey = "4f893a7c7319cf87dd70157ba42b956d";
-        var userCity = "#city-form"
-        
-        var queryURL = "https://api.openweathermap.org/data/2.5/weather?" + userCity + "&appid=91a9c71802bf4d929c29e62320058096";
+        var userCity = "";
 
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-        }).then(function(response){
-            console.log(response);
-// creating the containers
-            var cityName = $("<h1>").text(response.name);
-            var cityTemp = $("<p>").text(response.main.temp)
-            var cityWind = $("<p>").text(response.wind.speed);
-            var cityUvIndex = $("<p>").text(response.UVindex);
-            
-        })
 
+        function searchCity() {
+
+            var APIKey = "166a433c57516f51dfab1f7edaed8413";
+
+            var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + userCity + "&appid=" + APIKey;
+
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            }).then(function (response) {
+                console.log(response);
+                // creating the containers
+                var cityName = $("<h1>").text(response.name);
+                var cityTemp = $("<p>").text(response.main.temp);
+                var cityWind = $("<p>").text(response.wind.speed);
+                var cityHumidity = $("<p>").text(response.main.humidity);
+                $("#citiesForecast").append(cityName);
+                $("#citiesForecast").append(cityTemp);
+                $("#citiesForecast").append(cityWind);
+                $("#citiesForecast").append(cityHumidity);
+            })
+        }
+        // function to render the cities button. Creating a button to save the previous locations similiar to the movie activitiy
         function renderCities() {
             for (var i = 0; i < userCities.length; i++) {
-                var a = $("<div>");
+                var a = $("<button>");
                 //This is where I am completely lost
+                a.addClass("city");
+                a.attr("data-name", userCities[i]);
+                a.text(userCities[i]);
             }
+            $("#Cities").append(a);
         }
 
-        $("#city-input").on("click", function(event) {
+        $("#add-city").on("click", function (event) {
             event.preventDefault();
-
             var userInput = $("#desiredCity").val();
-            userCities.push(userInput);
-
-        renderCities();
+            console.log(userInput);
+            if (userInput === "") {
+                alert("Value must be input");
+            } else {
+                
+                userCity = userInput;
+                userCities.push(userCity);
+                console.log(userCity);
+                searchCity();
+                renderCities();
+            }
+            // userCities.push(userInput);
+            // console.log(userCities);
         });
     </script>
 </body>
+
 </html>
